@@ -4,14 +4,16 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run generate-index && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate-index": "node ./src/content/generate-search-index.js"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.8",
     "astro": "^5.9.0",
+    "gray-matter": "^4.0.3",
     "partytown": "^0.0.0",
     "tailwindcss": "^4.1.8"
   }

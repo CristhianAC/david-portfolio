@@ -1,0 +1,118 @@
+---
+// Astro component: Search.astro - No server-side imports needed
+---
+
+<script type="module">
+  import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js";
+
+  let query = "";
+  let results = [];
+  let searchIndex = [];
+  let fuse = null;
+
+  // Load search index from JSON file
+  async function loadSearchIndex() {
+    try {
+      const response = await fetch("/search-index.json");
+      searchIndex = await response.json();
+      fuse = new Fuse(searchIndex, {
+        keys: ["title", "description", "tags", "category", "author"],
+        threshold: 0.3,
+      });
+    } catch (error) {
+      console.error("Error loading search index:", error);
+    }
+  }
+
+  function handleInput(e) {
+    if (!fuse) return;
+
+    query = e.target.value;
+    results = query ? fuse.search(query).map((r) => r.item) : [];
+    updateResults();
+  }
+
+  function updateResults() {
+    const list = document.getElementById("search-results");
+    if (!list) return;
+
+    // Show/hide results container
+    if (query.trim() === "") {
+      list.classList.add("hidden");
+      return;
+    }
+
+    list.classList.remove("hidden");
+    list.innerHTML = "";
+
+    if (results.length > 0) {
+      results.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "border-b border-gray-200 last:border-b-0";
+
+        const a = document.createElement("a");
+        a.href = `/article/${item.slug}`;
+        a.className = "block p-3 hover:bg-gray-50 transition-colors";
+
+        a.innerHTML = `
+          <h4 class="font-semibold text-gray-900 hover:text-blue-600">${item.title}</h4>
+          <p class="text-sm text-gray-600 mt-1">${item.description}</p>
+          <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
+            <span class="bg-gray-100 px-2 py-1 rounded">${item.category}</span>
+            <span>by ${item.author}</span>
+          </div>
+        `;
+
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    } else if (query) {
+      const li = document.createElement("li");
+      li.innerHTML =
+        '<p class="text-gray-500 p-4 text-center">No se encontraron resultados.</p>';
+      list.appendChild(li);
+    }
+  }
+
+  // Initialize when DOM is loaded
+  document.addEventListener("DOMContentLoaded", async () => {
+    await loadSearchIndex();
+
+    // Attach event listener to input
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) {
+      searchInput.addEventListener("input", handleInput);
+    }
+  });
+</script>
+
+<div class="search-container mb-8">
+  <div class="relative max-w-md mx-auto">
+    <input
+      id="search-input"
+      type="text"
+      placeholder="Buscar artículos de Machine Learning..."
+      class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    />
+    <svg
+      class="absolute right-3 top-2.5 w-5 h-5 text-gray-400"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+    </svg>
+  </div>
+
+  <div class="mt-4 max-w-2xl mx-auto">
+    <ul
+      id="search-results"
+      class="border border-gray-200 rounded-lg bg-white shadow-lg hidden max-h-96 overflow-y-auto"
+    >
+    </ul>
+  </div>
+</div>
