@@ -1,34 +1,34 @@
 export default {
-    siteTitle: "The Storyteller", // Main site title displayed in header
-    siteSubTitle: "Minimal musings on code, design, and life", // Subtitle shown under main title
-    copyright: "© 2025 The Storyteller. All Rights Reserved.", // Footer copyright text
+    siteTitle: "David Rodriguez Arrauth - Machine Learning Portfolio", // Main site title displayed in header
+    siteSubTitle: "Insights, projects, and resources in Machine Learning & AI", // Subtitle shown under main title
+    copyright: "© 2025 David Rodriguez Arrauth. All Rights Reserved.", // Footer copyright text
     showAuthorsOnHomePage: false, // Display author info on homepage
     showFeaturrdPostsOnHomePage: true, // Show featured posts section on homepage
     showCategoryOnPosts: true, // Display categories on posts in homepage
     labels: {
-        featuredPosts: "Featured Posts", // Title for featured posts section
-        latestPosts: "Latest Posts", // Title for latest posts section
-        viewAllPosts: "View All Posts", // Text for link to paginated blog
-        backToHome: "Back to Home", // Back navigation text
-        youMightAlsoLike: "You Might Also Like", // Similar posts section title
-        postedIn: "Posted in", // Category prefix text in articles
-        noArticlesFound: "No articles found.", // Empty state message
-        allCategories: "All Categories", // Categories page title
-        allTags: "All Tags", // Tags page title
-        allAuthors: "All Authors", // Authors page title
-        exploreArticlesByTags: "Explore articles organized by topics", // Tags page description
-        exploreArticlesByCategories: "Explore articles organized by topics", // Categories page description
-        exploreArticlesByAuthors: "Explore articles organized by authors", // Authors page description
-        readMore: "Read More", // Text for "Read More" links on featured posts
-        shareThisArticle: "Share this article", // Share button text
+        featuredPosts: "Featured ML Projects", // Title for featured posts section
+        latestPosts: "Latest in Machine Learning", // Title for latest posts section
+        viewAllPosts: "View All ML Articles", // Text for link to paginated blog
+        backToHome: "Back to Portfolio", // Back navigation d
+        youMightAlsoLike: "You Might Also Like (ML)", // Similar posts section title
+        postedIn: "Category:", // Category prefix text in articles
+        noArticlesFound: "No machine learning articles found.", // Empty state message
+        allCategories: "All ML Categories", // Categories page title
+        allTags: "All ML Tags", // Tags page title
+        allAuthors: "All Contributors", // Authors page title
+        exploreArticlesByTags: "Explore ML articles organized by topics", // Tags page description
+        exploreArticlesByCategories: "Explore ML articles organized by categories", // Categories page description
+        exploreArticlesByAuthors: "Explore ML articles organized by contributors", // Authors page description
+        readMore: "Read More (ML)", // Text for "Read More" links on featured posts
+        shareThisArticle: "Share this ML article", // Share button text
     },
     pagination: {
         showPrevNext: true, // Show Previous/Next navigation buttons
         prevText: "Previous", // Text for previous page button
         nextText: "Next", // Text for next page button
-        postLabel: "posts", // Label used in pagination info (e.g., "8 posts")
+        postLabel: "ML articles", // Label used in pagination info (e.g., "8 ML articles")
     },
-    defaultAuthorName: "Hasin Hayder",
+    defaultAuthorName: "David Rodriguez Arrauth",
     showCategoriesLinkOnFooter: true, // Show Categories link in footer
     showTagsLinkOnFooter: true, // Show Tags link in footer
     showAuthorsLinkOnFooter: true, // Show Authors link in footer
