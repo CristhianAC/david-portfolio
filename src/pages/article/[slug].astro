@@ -5,7 +5,7 @@ import Header from "../../components/Header.astro"
 import Footer from "../../components/Footer.astro"
 import FeaturedCard from "../../components/FeaturedCard.astro"
 import SiteOptions from "../../site.config.mjs"
-
+import { supabase } from "@/lib/supabase"
 export async function getStaticPaths() {
   const posts = await getCollection("article")
   return posts.map((post) => ({
@@ -13,16 +13,51 @@ export async function getStaticPaths() {
     props: post,
   }))
 }
+async function validatePremium(){
+    const { cookies, redirect } = Astro;
+
+  const accessToken = cookies.get("sb-access-token");
+  const refreshToken = cookies.get("sb-refresh-token");
+
+  if (!accessToken || !refreshToken) {
+    return redirect("/signin");
+  }
+
+  const { data, error } = await supabase.auth.setSession({
+    refresh_token: refreshToken.value,
+    access_token: accessToken.value,
+  });
+
+  if (error) {
+    cookies.delete("sb-access-token", {
+      path: "/",
+    });
+    cookies.delete("sb-refresh-token", {
+      path: "/",
+    });
+
+    return redirect("/signin");
+}
+
+
+
+
+}
 
 type Props = CollectionEntry<"article">
 
 const post = Astro.props
-const { title, pubDate, category, description, thumb, author, tags, large } = post.data
+const { title, pubDate, category, description, thumb, author, tags, large, premium } = post.data
 const { Content } = await post.render()
 
+if (premium) {
+  validatePremium()
+}
 // Get similar posts (same category, excluding current post)
 const allPosts = await getCollection("article")
 const similarPosts = allPosts.filter((p) => p.slug !== post.slug && p.data.category === post.data.category).slice(0, 3)
+
+
 
 const formattedDate = new Intl.DateTimeFormat("en-US", {
   year: "numeric",

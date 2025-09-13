@@ -4,9 +4,10 @@ import { Image } from "astro:assets";
 import david from "@/assets/david/fotodavid.webp";
 export interface Props {
   showTitle?: boolean;
+  minimalism?: boolean;
 }
 
-const { showTitle = true } = Astro.props;
+const { showTitle = true, minimalism = false } = Astro.props;
 ---
 
 <header class="flex flex-col items-center mt-10 mb-8 relative">
@@ -66,23 +67,34 @@ const { showTitle = true } = Astro.props;
     </svg>
   </button>
 
-  <a href="/" class="flex flex-col items-center">
-    <img
-      src="/fotodavid.webp"
-      alt="Profile"
-      class="w-28 h-34 rounded-2xl object-top object-cover border-2 border-gray-200 dark:border-gray-700 shadow mb-6 hover:opacity-80 transition-opacity"
-    />
-    {
-      showTitle && (
-        <>
-          <h1 class="text-4xl font-bold tracking-tight mb-2 text-center hover:opacity-80 transition-opacity">
-            {SiteOptions.siteTitle}
-          </h1>
-          <p class="text-lg text-gray-500 dark:text-gray-400 font-light text-center">
-            {SiteOptions.siteSubTitle}
-          </p>
-        </>
-      )
-    }
-  </a>
+  {
+    !minimalism ? (
+      <a href="/" class="flex flex-col items-center">
+        <img
+          src="/fotodavid.webp"
+          alt="Profile"
+          class="w-28 h-34 rounded-2xl object-top object-cover border-2 border-gray-200 dark:border-gray-700 shadow mb-6 hover:opacity-80 transition-opacity"
+        />
+        {showTitle && (
+          <>
+            <h1 class="text-4xl font-bold tracking-tight mb-2 text-center hover:opacity-80 transition-opacity">
+              {SiteOptions.siteTitle}
+            </h1>
+            <p class="text-lg text-gray-500 dark:text-gray-400 font-light text-center">
+              {SiteOptions.siteSubTitle}
+            </p>
+          </>
+        )}
+      </a>
+    ) : (
+      <a href="/">
+        <h1 class="text-xl font-bold tracking-tight text-center hover:opacity-80 transition-opacity">
+          {SiteOptions.siteTitle}
+        </h1>
+        <p class="text-xs text-gray-500 dark:text-gray-400 font-light text-center">
+          {SiteOptions.siteSubTitle}
+        </p>
+      </a>
+    )
+  }
 </header>

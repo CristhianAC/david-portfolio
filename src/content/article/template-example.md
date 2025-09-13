@@ -8,6 +8,7 @@ tags: ["api", "rest", "design", "developer-experience", "backend"]
 featured: true
 thumb: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=400&q=80"
 large: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2400&q=80"
+premium: false
 ---
 
 In today's interconnected digital world, APIs (Application Programming Interfaces) serve as the backbone of modern software development. A well-designed API can make or break the developer experience, determining whether your service becomes widely adopted or abandoned in frustration.
@@ -20,16 +21,16 @@ A great API is like a well-designed tool - it should feel intuitive, be easy to 
 
 ```javascript
 // Good: Consistent naming and structure
-GET / users / { id }
-POST / users
-PUT / users / { id }
-DELETE / users / { id }
+GET / users / { id };
+POST / users;
+PUT / users / { id };
+DELETE / users / { id };
 
 // Bad: Inconsistent patterns
-GET / user / { id }
-POST / createUser
-PUT / updateUserById / { id }
-DELETE / removeUser / { id }
+GET / user / { id };
+POST / createUser;
+PUT / updateUserById / { id };
+DELETE / removeUser / { id };
 ```
 
 ### 2. Predictable Behavior
@@ -323,17 +324,17 @@ Provide official SDKs for popular languages:
 
 ```javascript
 // JavaScript SDK example
-const api = new BlogAPI("your-api-key")
+const api = new BlogAPI("your-api-key");
 
 const articles = await api.articles.list({
   category: "tech",
   limit: 10,
-})
+});
 
 const newArticle = await api.articles.create({
   title: "My New Article",
   content: "Article content here...",
-})
+});
 ```
 
 ### Error Recovery and Debugging
@@ -393,23 +394,26 @@ GET /articles?published_after=2025-01-01&limit=50
 // Example with Jest and Supertest
 describe("Articles API", () => {
   test("GET /articles returns list of articles", async () => {
-    const response = await request(app).get("/articles").expect(200)
+    const response = await request(app).get("/articles").expect(200);
 
-    expect(response.body.data).toBeInstanceOf(Array)
-    expect(response.body.meta).toBeDefined()
-  })
+    expect(response.body.data).toBeInstanceOf(Array);
+    expect(response.body.meta).toBeDefined();
+  });
 
   test("POST /articles creates new article", async () => {
     const newArticle = {
       title: "Test Article",
       content: "Test content",
-    }
+    };
 
-    const response = await request(app).post("/articles").send(newArticle).expect(201)
+    const response = await request(app)
+      .post("/articles")
+      .send(newArticle)
+      .expect(201);
 
-    expect(response.body.data.title).toBe(newArticle.title)
-  })
-})
+    expect(response.body.data.title).toBe(newArticle.title);
+  });
+});
 ```
 
 ### Contract Testing
@@ -418,12 +422,12 @@ Use tools like Pact for API contract testing:
 
 ```javascript
 // Consumer test
-const { PactV3 } = require("@pact-foundation/pact")
+const { PactV3 } = require("@pact-foundation/pact");
 
 const provider = new PactV3({
   consumer: "ArticleConsumer",
   provider: "ArticleAPI",
-})
+});
 
 provider
   .given("articles exist")
@@ -438,7 +442,7 @@ provider
     body: {
       data: [{ id: 1, title: "Test Article" }],
     },
-  })
+  });
 ```
 
 ## Monitoring and Analytics
@@ -453,15 +457,17 @@ Track key metrics:
 ```javascript
 // Example monitoring with custom headers
 app.use((req, res, next) => {
-  const start = Date.now()
+  const start = Date.now();
 
   res.on("finish", () => {
-    const duration = Date.now() - start
-    console.log(`${req.method} ${req.path} - ${res.statusCode} - ${duration}ms`)
-  })
+    const duration = Date.now() - start;
+    console.log(
+      `${req.method} ${req.path} - ${res.statusCode} - ${duration}ms`
+    );
+  });
 
-  next()
-})
+  next();
+});
 ```
 
 ## Common API Design Patterns

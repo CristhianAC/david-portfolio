@@ -1,7 +1,8 @@
 // Con `output: 'hybrid'` configurado:
-// export const prerender = false;
+export const prerender = false;
 import type { APIRoute } from "astro";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
+import type { UserAttributes } from "@supabase/supabase-js";
 
 export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
@@ -13,15 +14,20 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       status: 400,
     });
   }
-
+  const userAtr = {
+    name: formData.get("name")?.toString() || undefined,
+  };
   const { error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      data: userAtr,
+    },
   });
 
   if (error) {
     return new Response(error.message, { status: 500 });
   }
 
-  return redirect("/signin");
+  return redirect("/login");
 };

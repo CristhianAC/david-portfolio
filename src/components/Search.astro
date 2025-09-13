@@ -48,8 +48,9 @@
     if (results.length > 0) {
       results.forEach((item, index) => {
         const li = document.createElement("li");
-        li.className = "border-b border-gray-200 dark:border-gray-700 last:border-b-0 opacity-0 translate-y-2 transition-all duration-300";
-        
+        li.className =
+          "border-b border-gray-200 dark:border-gray-700 last:border-b-0 opacity-0 translate-y-2 transition-all duration-300";
+
         // Animate each result with a slight delay
         setTimeout(() => {
           li.classList.remove("opacity-0", "translate-y-2");
@@ -57,7 +58,8 @@
 
         const a = document.createElement("a");
         a.href = `/article/${item.slug}`;
-        a.className = "block p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 group";
+        a.className =
+          "block p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 group";
 
         a.innerHTML = `
           <h4 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">${item.title}</h4>
@@ -85,11 +87,11 @@
           <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">Intenta con términos diferentes</p>
         </div>
       `;
-      
+
       setTimeout(() => {
         li.classList.remove("opacity-0", "translate-y-2");
       }, 100);
-      
+
       list.appendChild(li);
     }
   }
@@ -103,7 +105,7 @@
   function hideResults(list) {
     list.classList.add("animate-fadeOutDown");
     list.classList.remove("animate-fadeInUp");
-    
+
     setTimeout(() => {
       list.classList.add("hidden");
       list.classList.remove("animate-fadeOutDown");
@@ -117,15 +119,19 @@
     // Attach event listener to input
     const searchInput = document.getElementById("search-input");
     const resultsContainer = document.getElementById("search-results");
-    
+
     if (searchInput) {
       searchInput.addEventListener("input", handleInput);
-      
+
       // Focus effects
       searchInput.addEventListener("focus", () => {
-        searchInput.classList.add("ring-2", "ring-blue-500", "dark:ring-blue-400");
+        searchInput.classList.add(
+          "ring-2",
+          "ring-blue-500",
+          "dark:ring-blue-400"
+        );
       });
-      
+
       searchInput.addEventListener("blur", (e) => {
         // Delay hiding results to allow clicking on them
         setTimeout(() => {
@@ -133,14 +139,21 @@
             hideResults(resultsContainer);
           }
         }, 150);
-        
-        searchInput.classList.remove("ring-2", "ring-blue-500", "dark:ring-blue-400");
+
+        searchInput.classList.remove(
+          "ring-2",
+          "ring-blue-500",
+          "dark:ring-blue-400"
+        );
       });
     }
 
     // Click outside to close results
     document.addEventListener("click", (e) => {
-      if (!searchInput.contains(e.target) && !resultsContainer.contains(e.target)) {
+      if (
+        !searchInput.contains(e.target) &&
+        !resultsContainer.contains(e.target)
+      ) {
         hideResults(resultsContainer);
       }
     });
@@ -158,7 +171,9 @@
         class="w-full px-4 py-3 pr-12 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-200 placeholder-gray-500 dark:placeholder-gray-400"
         autocomplete="off"
       />
-      <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+      <div
+        class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none"
+      >
         <svg
           class="w-5 h-5 text-gray-400 dark:text-gray-500 group-focus-within:text-blue-500 dark:group-focus-within:text-blue-400 transition-colors duration-200"
           fill="none"
@@ -169,8 +184,7 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          ></path>
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
       </div>
     </div>
@@ -222,28 +236,28 @@
   .scrollbar-thin {
     scrollbar-width: thin;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background-color: rgb(209 213 219);
     border-radius: 3px;
   }
-  
+
   .dark .scrollbar-thin::-webkit-scrollbar-thumb {
     background-color: rgb(75 85 99);
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background-color: rgb(156 163 175);
   }
-  
+
   .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background-color: rgb(107 114 128);
   }
