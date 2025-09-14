@@ -10,14 +10,24 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   const password = formData.get("password")?.toString();
 
   if (!email || !password) {
-    return new Response("Correo electrónico y contraseña obligatorios", {
-      status: 400,
-    });
+    return new Response(
+      JSON.stringify({
+        message: "Correo electrónico y contraseña obligatorios",
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
+
   const userAtr = {
     name: formData.get("name")?.toString() || undefined,
   };
-  const { error } = await supabase.auth.signUp({
+
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -26,8 +36,27 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   });
 
   if (error) {
-    return new Response(error.message, { status: 500 });
+    return new Response(JSON.stringify({ message: error.message }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
-  return redirect("/login");
+  // Devolver JSON en lugar de redirect
+  return new Response(
+    JSON.stringify({
+      message:
+        "Registro exitoso. Por favor verifica tu email antes de iniciar sesión.",
+      user: data.user,
+      session: data.session,
+    }),
+    {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 };

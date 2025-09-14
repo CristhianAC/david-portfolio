@@ -9,9 +9,17 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const password = formData.get("password")?.toString();
 
   if (!email || !password) {
-    return new Response("Correo electrónico y contraseña obligatorios", {
-      status: 400,
-    });
+    return new Response(
+      JSON.stringify({
+        message: "Correo electrónico y contraseña obligatorios",
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -20,7 +28,12 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   });
 
   if (error) {
-    return new Response(error.message, { status: 500 });
+    return new Response(JSON.stringify({ message: error.message }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   const { access_token, refresh_token } = data.session;
@@ -30,5 +43,18 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   cookies.set("sb-refresh-token", refresh_token, {
     path: "/",
   });
-  return redirect("/");
+
+  // Devolver JSON en lugar de redirect
+  return new Response(
+    JSON.stringify({
+      user: data.user,
+      session: data.session,
+    }),
+    {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 };
