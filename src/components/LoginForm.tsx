@@ -3,7 +3,7 @@ import type { FormEvent } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { login } from "./services/login";
-import { LocalStorageEnum } from "./model/localStorageEnum";
+import { AuthCookies } from "../utils/authCookies";
 
 interface FormData {
   email: string;
@@ -76,9 +76,10 @@ export function LoginForm() {
 
       if (response) {
         toast.success("¡Inicio de sesión exitoso!");
-        localStorage.setItem(
-          LocalStorageEnum.TOKEN,
-          response.session.access_token
+        // Guardar tokens de autenticación en cookies
+        AuthCookies.setAuthTokens(
+          response.session.access_token,
+          response.session.refresh_token
         );
         // Redirigir después de un breve delay para mostrar el toast
         setTimeout(() => {
@@ -88,7 +89,6 @@ export function LoginForm() {
         toast.error("Error al iniciar sesión");
       }
     } catch (error) {
-     
     } finally {
       setIsLoading(false);
     }

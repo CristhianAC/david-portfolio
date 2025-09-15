@@ -1,7 +1,7 @@
 ---
 import SiteOptions from "../site.config.mjs";
-import { Image } from "astro:assets";
-import david from "@/assets/david/fotodavid.webp";
+import LoginButton from "./auth/LoginButton.astro";
+import ToggleThemeButton from "./theme/ToggleThemeButton.astro";
 export interface Props {
   showTitle?: boolean;
   minimalism?: boolean;
@@ -11,61 +11,9 @@ const { showTitle = true, minimalism = false } = Astro.props;
 ---
 
 <header class="flex flex-col items-center mt-10 mb-8 relative">
-  <a
-    href="/login"
-    id="theme-toggle-button"
-    aria-label="Toggle theme"
-    class="absolute top-0 right-12 mt-2 mr-2 p-2 rounded-md text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      height="24px"
-      viewBox="0 -960 960 960"
-      class="w-6 h-6"
-      fill="#e3e3e3"
-      ><path
-        d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"
-      ></path></svg
-    >
-  </a>
+  <LoginButton />
   <!-- Theme Toggle Button -->
-  <button
-    onclick="toggleTheme()"
-    id="theme-toggle-button"
-    aria-label="Toggle theme"
-    class="absolute top-0 right-0 mt-2 mr-2 p-2 rounded-md text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
-  >
-    <svg
-      id="sun-icon"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      class="w-5 h-5 hidden"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-      ></path>
-    </svg>
-    <svg
-      id="moon-icon"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      class="w-5 h-5 hidden"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
-      ></path>
-    </svg>
-  </button>
+  <ToggleThemeButton />
 
   {
     !minimalism ? (

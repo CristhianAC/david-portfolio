@@ -1,6 +1,5 @@
 import { useState, type FormEvent } from "react";
 import { register } from "./services/register";
-import { LocalStorageEnum } from "./model/localStorageEnum";
 import { toast, ToastContainer } from "react-toastify";
 
 interface FormData {
