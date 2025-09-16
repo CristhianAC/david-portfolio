@@ -1,0 +1,158 @@
+---
+export interface Props {
+  isAuthenticated: boolean;
+  slug: string;
+  contentPreview?: string; // Vista previa opcional
+}
+
+const { isAuthenticated, slug, contentPreview } = Astro.props;
+
+// Importar utilidades de ofuscación
+import { generateConsistentRandomContent, generateRandomParagraph } from '../utils/textObfuscator';
+
+// Generar contenido falso consistente basado en el slug
+const fakeContent = generateConsistentRandomContent(slug, 800);
+---
+
+{!isAuthenticated && (
+  <!-- Mostrar contenido ofuscado si no está autenticado -->
+  <div class="protected-content-wrapper relative">
+    <!-- Contenido falso difuminado -->
+    <div class="fake-content blur-sm select-none pointer-events-none fake-text" aria-hidden="true">
+      <div class="prose prose-lg max-w-none text-gray-700 dark:text-slate-300">
+        <!-- Párrafos de contenido falso -->
+        <p class="text-lg leading-relaxed mb-4">{fakeContent.substring(0, 200)}...</p>
+        <p class="leading-relaxed mb-4">{fakeContent.substring(200, 400)}...</p>
+        <p class="leading-relaxed mb-4">{fakeContent.substring(400, 600)}...</p>
+        <p class="leading-relaxed">{fakeContent.substring(600)}...</p>
+        
+        <!-- Más párrafos falsos para llenar el espacio -->
+        <h3 class="text-xl font-semibold mt-6 mb-3">{generateRandomParagraph(3)}</h3>
+        <p class="leading-relaxed mb-4">{generateRandomParagraph(25)}</p>
+        <p class="leading-relaxed mb-4">{generateRandomParagraph(30)}</p>
+        
+        <h3 class="text-xl font-semibold mt-6 mb-3">{generateRandomParagraph(4)}</h3>
+        <p class="leading-relaxed mb-4">{generateRandomParagraph(28)}</p>
+        <p class="leading-relaxed">{generateRandomParagraph(22)}</p>
+      </div>
+    </div>
+    
+    <!-- Overlay con mensaje de autenticación -->
+    <div class="absolute inset-0 flex items-center justify-center bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm auth-overlay">
+      <div class="text-center p-8 max-w-md mx-4 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+        <div class="mb-6">
+          <svg class="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+        
+        <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-slate-100">
+          🔒 Contenido Premium
+        </h3>
+        
+        <p class="text-gray-600 dark:text-slate-400 mb-6 leading-relaxed text-sm">
+          Este artículo es exclusivo para usuarios registrados. Regístrate para acceder al contenido completo.
+          {contentPreview && (
+            <span class="block mt-2 text-xs italic text-gray-500 dark:text-gray-400">
+              Vista previa: {contentPreview}
+            </span>
+          )}
+        </p>
+        
+        <div class="space-y-3">
+          <a 
+            href="/login" 
+            class="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 no-underline text-sm"
+          >
+            Iniciar Sesión
+          </a>
+          
+          <a 
+            href="/signup" 
+            class="inline-block w-full border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-medium py-3 px-6 rounded-lg transition-colors duration-200 no-underline text-sm"
+          >
+            Crear Cuenta Gratis
+          </a>
+        </div>
+        
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
+          ¿Ya tienes cuenta? <a href="/login" class="text-blue-600 hover:underline">Inicia sesión aquí</a>
+        </p>
+      </div>
+    </div>
+  </div>
+)}
+
+<style>
+  .protected-content-wrapper {
+    min-height: 500px;
+    position: relative;
+  }
+  
+  .fake-content {
+    /* Asegurar que el contenido falso no sea seleccionable ni accesible */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+  }
+  
+  /* Aplicar blur más intenso en contenido falso */
+  .fake-content {
+    filter: blur(4px);
+    opacity: 0.5;
+  }
+  
+  /* Prevenir inspección del contenido falso */
+  .fake-text * {
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+  }
+  
+  .fake-text::selection {
+    background: transparent !important;
+  }
+  
+  .fake-text::-moz-selection {
+    background: transparent !important;
+  }
+  
+  /* Efectos adicionales para hacer el overlay más atractivo */
+  .protected-content-wrapper .absolute {
+    backdrop-filter: blur(3px);
+  }
+  
+  /* Animación sutil para el overlay */
+  @keyframes fadeInUp {
+    from { 
+      opacity: 0; 
+      transform: translateY(20px) scale(0.95); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0) scale(1); 
+    }
+  }
+  
+  .auth-overlay > div {
+    animation: fadeInUp 0.4s ease-out;
+  }
+  
+  /* Hacer el contenido falso aún menos accesible */
+  .fake-text {
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Prevenir zoom en móviles */
+  @media (max-width: 768px) {
+    .fake-content {
+      filter: blur(6px);
+      opacity: 0.3;
+    }
+  }
+</style>

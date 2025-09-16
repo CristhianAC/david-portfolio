@@ -2,13 +2,13 @@
 title: "The Art of API Design: Building Developer-Friendly Interfaces"
 description: "Explore the principles and best practices for designing APIs that developers love to use and integrate with."
 pubDate: 2025-05-18
-author: "Hasin Hayder"
+author: "David Arrauth"
 category: "API Design"
 tags: ["api", "rest", "design", "developer-experience", "backend"]
 featured: true
 thumb: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=400&q=80"
 large: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2400&q=80"
-premium: false
+premium: true
 ---
 
 In today's interconnected digital world, APIs (Application Programming Interfaces) serve as the backbone of modern software development. A well-designed API can make or break the developer experience, determining whether your service becomes widely adopted or abandoned in frustration.

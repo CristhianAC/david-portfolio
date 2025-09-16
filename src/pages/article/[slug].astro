@@ -4,23 +4,26 @@ import BlogLayout from "../../layouts/BlogLayout.astro"
 import Header from "../../components/Header.astro"
 import Footer from "../../components/Footer.astro"
 import FeaturedCard from "../../components/FeaturedCard.astro"
+import ProtectedContent from "../../components/ProtectedContent.astro"
 import SiteOptions from "../../site.config.mjs"
-import { supabase } from "@/lib/supabase"
+import { supabase } from "../../lib/supabase"
+export const prerender = true
 export async function getStaticPaths() {
   const posts = await getCollection("article")
+  
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: post,
   }))
 }
 async function validatePremium(){
-    const { cookies, redirect } = Astro;
+  const { cookies } = Astro;
 
   const accessToken = cookies.get("sb-access-token");
   const refreshToken = cookies.get("sb-refresh-token");
 
   if (!accessToken || !refreshToken) {
-    return redirect("/signin");
+    return false;
   }
 
   const { data, error } = await supabase.auth.setSession({
@@ -36,12 +39,10 @@ async function validatePremium(){
       path: "/",
     });
 
-    return redirect("/signin");
-}
+    return false;
+  }
 
-
-
-
+  return true;
 }
 
 type Props = CollectionEntry<"article">
@@ -50,8 +51,10 @@ const post = Astro.props
 const { title, pubDate, category, description, thumb, author, tags, large, premium } = post.data
 const { Content } = await post.render()
 
+// Validar si el usuario está autenticado para contenido premium
+let isSignedIn = false;
 if (premium) {
-  validatePremium()
+  isSignedIn = await validatePremium();
 }
 // Get similar posts (same category, excluding current post)
 const allPosts = await getCollection("article")
@@ -113,7 +116,16 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
         </div>
       )
     }
-    <Content />
+    
+    {premium && !isSignedIn ? (
+      <ProtectedContent 
+        isAuthenticated={isSignedIn}
+        slug={post.slug}
+        contentPreview={description}
+      />
+    ) : (
+      <Content />
+    )}
   </article>
 
 
