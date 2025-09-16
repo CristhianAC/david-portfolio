@@ -174,8 +174,8 @@ export function RegisterForm() {
                   name="name"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 bg-white ${
-                    errors.name ? "border-red-500" : "border-slate-300"
+                  className={`w-full text-black pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 bg-white ${
+                    errors.name ? "border-red-500" : "border-slate-300 "
                   }`}
                   placeholder="Tu nombre completo"
                   required
@@ -215,7 +215,7 @@ export function RegisterForm() {
                   name="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 bg-white ${
+                  className={`w-full text-black pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 bg-white ${
                     errors.email ? "border-red-500" : "border-slate-300"
                   }`}
                   placeholder="tu@email.com"
@@ -258,7 +258,7 @@ export function RegisterForm() {
                   onChange={(e) =>
                     handleInputChange("password", e.target.value)
                   }
-                  className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 bg-white ${
+                  className={`w-full text-black pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 bg-white ${
                     errors.password ? "border-red-500" : "border-slate-300"
                   }`}
                   placeholder="••••••••"
@@ -266,7 +266,7 @@ export function RegisterForm() {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute text-black inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => togglePasswordVisibility("password")}
                 >
                   <svg
@@ -332,7 +332,7 @@ export function RegisterForm() {
                   onChange={(e) =>
                     handleInputChange("confirmPassword", e.target.value)
                   }
-                  className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 bg-white ${
+                  className={`w-full text-black pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 bg-white ${
                     errors.confirmPassword
                       ? "border-red-500"
                       : "border-slate-300"
