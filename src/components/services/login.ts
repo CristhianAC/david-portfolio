@@ -18,7 +18,7 @@ export const login = async (
     toast.error(errorMessage);
     throw new Error(errorMessage);
   }
-
+  
   const data = await response.json();
   return data as LoginResponse;
 };
