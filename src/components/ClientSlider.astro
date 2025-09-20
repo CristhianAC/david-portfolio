@@ -1,0 +1,243 @@
+---
+import CanalDePanama from "@/assets/customers/canal-de-panama.webp";
+import Finergy from "@/assets/clients/Finergy.svg";
+import Image from "astro/components/Image.astro";
+const logos = [
+  { name: Finergy, alt: "Finergy" },
+  { name: Finergy, alt: "Finergy" },
+  { name: Finergy, alt: "Finergy" },
+  { name: Finergy, alt: "Finergy" },
+  { name: Finergy, alt: "Finergy" },
+];
+---
+
+<div class="mb-8">
+  <p class="text-[#ffffff] text-pretty">
+    Respaldado por organizaciones prestigiosas:
+  </p>
+</div>
+
+<div class="scroller visibility-hidden" data-speed="fast">
+  <ul class="scroller__inner">
+    {
+      logos.map((logo) => (
+        <li class="tag-list">
+          <img src={logo.name.src} alt={logo.alt} class="Image" />
+        </li>
+      ))
+    }
+  </ul>
+</div>
+<style>
+  .scroller {
+    width: 100%;
+  }
+
+  .visibility-hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .scroller__inner {
+    padding-block: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .scroller.ready {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .scroller[data-animated="true"] {
+    overflow: hidden;
+    -webkit-mask: linear-gradient(
+      90deg,
+      transparent,
+      white 20%,
+      white 80%,
+      transparent
+    );
+    mask: linear-gradient(
+      90deg,
+      transparent,
+      white 20%,
+      white 80%,
+      transparent
+    );
+  }
+
+  .scroller[data-animated="true"] .scroller__inner {
+    width: max-content;
+    flex-wrap: nowrap;
+    animation: scroll var(--_animation-duration, 40s)
+      var(--_animation-direction, forwards) linear infinite;
+  }
+
+  .scroller[data-direction="right"] {
+    --_animation-direction: reverse;
+  }
+
+  .scroller[data-direction="left"] {
+    --_animation-direction: forwards;
+  }
+
+  .scroller[data-speed="fast"] {
+    --_animation-duration: 20s;
+  }
+
+  .scroller[data-speed="slow"] {
+    --_animation-duration: 60s;
+  }
+
+  @keyframes scroll {
+    to {
+      transform: translate(calc(-50% - 0.5rem));
+    }
+  }
+
+  /* general styles */
+
+  .tag-list {
+    margin: 0;
+    padding-inline: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    /* Fondo claro para modo light */
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem -0.25rem rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  /* Fondo oscuro para modo dark */
+  :global(.dark) .tag-list {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .tag-list {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  .tag-list:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  :global(.dark) .tag-list:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .tag-list:hover {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  /* for testing purposed to ensure the animation lined up correctly */
+
+  .Image {
+    width: auto;
+    height: 3rem;
+    max-width: 120px;
+    margin-inline: 0;
+    /* Logo negro en modo light */
+    filter: none;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+  }
+
+  /* Logo blanco en modo dark */
+  :global(.dark) .Image {
+    filter: invert(1) brightness(0.9) contrast(1.2);
+  }
+
+  /* También para cuando el sistema prefiere dark mode */
+  @media (prefers-color-scheme: dark) {
+    .Image {
+      filter: invert(1) brightness(0.9) contrast(1.2);
+    }
+  }
+
+  .tag-list:hover .Image {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .tag-list:hover .Image {
+    opacity: 1;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  function initSlider() {
+    const scrollers = document.querySelectorAll(".scroller");
+
+    // If a user hasn't opted in for reduced motion, then we add the animation
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      addAnimation();
+    } else {
+      // Si no se añade la animación, al menos mostrar los logos
+      scrollers.forEach((scroller) => {
+        scroller.classList.add("ready");
+      });
+    }
+
+    function addAnimation() {
+      scrollers.forEach((scroller) => {
+        const scrollerInner = scroller.querySelector(".scroller__inner");
+        if (!scrollerInner) return;
+
+        const scrollerContent = Array.from(scrollerInner.children);
+
+        // Solo duplicar si tenemos elementos
+        if (scrollerContent.length > 0) {
+          // Duplicar los elementos para el efecto de scroll infinito
+          scrollerContent.forEach((item) => {
+            const duplicatedItem = item.cloneNode(true) as HTMLElement;
+            duplicatedItem.setAttribute("aria-hidden", "true");
+            scrollerInner.appendChild(duplicatedItem);
+          });
+
+          // Marcar como animado
+          scroller.setAttribute("data-animated", "true");
+        }
+
+        // Mostrar el scroller después de preparar todo
+        requestAnimationFrame(() => {
+          scroller.classList.add("ready");
+        });
+      });
+    }
+  }
+
+  // Ejecutar cuando Astro cargue la página
+  document.addEventListener("astro:page-load", initSlider);
+
+  // También ejecutar cuando el DOM esté listo (por si acaso)
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSlider);
+  } else {
+    initSlider();
+  }
+</script>

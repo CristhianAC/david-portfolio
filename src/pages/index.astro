@@ -7,7 +7,7 @@ import PostCard from "../components/PostCard.astro";
 import FeaturedCard from "../components/FeaturedCard.astro";
 import SiteOptions from "../site.config.mjs";
 import Search from "@/components/Search.astro";
-
+import ClientSlider from "@/components/ClientSlider.astro";
 // Get all articles and sort by publication date
 const allPosts = await getCollection("article");
 const sortedPosts = allPosts.sort(
@@ -97,6 +97,9 @@ const showCategory = SiteOptions.showCategoryOnPosts || false;
         </div>
       )
     }
+    <div id="slider-container" class="mt-8">
+      <ClientSlider />
+    </div>
 
     <!-- Minimal Footer -->
     <Footer />
