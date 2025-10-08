@@ -11,7 +11,7 @@ const { title, description, thumb, premium } = post.data;
 ---
 
 <article
-  class="bg-gray-50 dark:bg-slate-800 rounded-lg shadow-sm p-6 flex flex-col items-start"
+  class="bg-gray-50 dark:bg-slate-800 rounded-2xl shadow-sm pb-6 flex flex-col items-start"
 >
   {
     SiteOptions.showThumbnailOnFeaturedPosts && thumb && (
@@ -19,40 +19,41 @@ const { title, description, thumb, premium } = post.data;
         <img
           src={thumb}
           alt={title}
-          class="w-full h-auto object-cover rounded mb-4"
+          class="w-full h-auto object-cover rounded-t-2xl mb-4"
         />
       </a>
     )
   }
+  <sectio class="px-3">
+    <!-- Premium Tag -->
+    <div class="flex items-center gap-2 mb-2 w-full">
+      <h3 class="text-xl font-bold flex-grow">
+        <a href={`/article/${post.slug}`}>{title}</a>
+      </h3>
+      {
+        premium && (
+          <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full shadow-sm">
+            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            PREMIUM
+          </span>
+        )
+      }
+    </div>
 
-  <!-- Premium Tag -->
-  <div class="flex items-center gap-2 mb-2 w-full">
-    <h3 class="text-xl font-bold flex-grow">
-      <a href={`/article/${post.slug}`}>{title}</a>
-    </h3>
+    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 flex-grow">
+      {description}
+    </p>
     {
-      premium && (
-        <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full shadow-sm">
-          <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          PREMIUM
-        </span>
+      SiteOptions.showReadMoreLinkOnFeaturedPosts && (
+        <a
+          href={`/article/${post.slug}`}
+          class="text-black dark:text-white underline text-sm mt-auto self-start"
+        >
+          {SiteOptions.labels.readMore}
+        </a>
       )
     }
-  </div>
-
-  <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 flex-grow">
-    {description}
-  </p>
-  {
-    SiteOptions.showReadMoreLinkOnFeaturedPosts && (
-      <a
-        href={`/article/${post.slug}`}
-        class="text-black dark:text-white underline text-sm mt-auto self-start"
-      >
-        {SiteOptions.labels.readMore}
-      </a>
-    )
-  }
+  </sectio>
 </article>

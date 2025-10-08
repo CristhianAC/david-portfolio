@@ -5,7 +5,7 @@ pubDate: 2025-05-18
 author: "David Arrauth"
 category: "API Design"
 tags: ["api", "rest", "design", "developer-experience", "backend"]
-featured: true
+
 thumb: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=400&q=80"
 large: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2400&q=80"
 premium: false
