@@ -17,39 +17,5 @@ import SiteOptions from "../site.config.mjs";
         class="font-bold underline text-[#bf0000]/80">UnderCodes</a
       >
     </p>
-    <nav class="">
-      <div class="flex items-center justify-center space-x-8 text-sm">
-        {
-          SiteOptions.showCategoriesLinkOnFooter && (
-            <a
-              href="/categories"
-              class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-slate-100 transition-colors font-medium"
-            >
-              Categories
-            </a>
-          )
-        }
-        {
-          SiteOptions.showTagsLinkOnFooter && (
-            <a
-              href="/tags"
-              class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-slate-100 transition-colors font-medium"
-            >
-              Tags
-            </a>
-          )
-        }
-        {
-          SiteOptions.showAuthorsLinkOnFooter && (
-            <a
-              href="/authors"
-              class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-slate-100 transition-colors font-medium"
-            >
-              Authors
-            </a>
-          )
-        }
-      </div>
-    </nav>
   </div>
 </footer>
