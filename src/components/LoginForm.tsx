@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { login } from "./services/login";
+import { supabase } from "@/lib/supabase";
 import { AuthCookies } from "../utils/authCookies";
 
 interface FormData {
@@ -275,6 +276,44 @@ export function LoginForm() {
               )}
             </button>
           </form>
+
+          <div className="mt-4">
+            <div className="flex items-center justify-center">
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    const redirectTo =
+                      import.meta.env.SUPABASE_CALLBACK_URL ||
+                      window.location.origin + "/";
+                    await supabase.auth.signInWithOAuth({
+                      provider: "google",
+                      options: { redirectTo },
+                    });
+                  } catch (err) {
+                    toast.error("Error iniciando sesión con Google");
+                  }
+                }}
+                className="w-full mt-2 inline-flex items-center justify-center gap-2 border border-slate-300 rounded-lg py-2 px-4 hover:bg-slate-50 text-black"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 48 48"
+                  className="w-5 h-5"
+                >
+                  <path
+                    fill="#EA4335"
+                    d="M24 9.5c3.9 0 7.1 1.4 9.2 3.3l6.9-6.9C36.9 2.4 30.8 0 24 0 14.7 0 6.9 5.2 2.7 12.8l7.9 6.1C12.9 14.2 18.1 9.5 24 9.5z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M46.5 24.5c0-1.6-.1-3.1-.4-4.6H24v9.1h12.7c-.5 2.7-2 5-4.3 6.6l6.9 5.3C43.6 37.1 46.5 31.3 46.5 24.5z"
+                  />
+                </svg>
+                Iniciar sesión con Google
+              </button>
+            </div>
+          </div>
 
           <div className="mt-8 text-center">
             <p className="text-slate-600">
