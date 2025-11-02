@@ -33,10 +33,26 @@ if (error || !user) {
 }
 
 // Información del usuario
-const userEmail = user.email || 'email@example.com';
-const userName = user.user_metadata?.full_name || userEmail?.split('@')[0] || 'Usuario';
-const userAvatar = user.user_metadata?.avatar_url;
-const isPremium = user.user_metadata?.is_premium || false;
+const metadata = user.user_metadata || {};
+const userEmail = user.email || "email@example.com";
+const userName = metadata.full_name || userEmail?.split("@")[0] || "Usuario";
+const userAvatar = metadata.avatar_url;
+const premiumActiveUntil = metadata.premium_active_until
+  ? new Date(metadata.premium_active_until)
+  : null;
+const premiumCancelledAt = metadata.premium_cancelled_at
+  ? new Date(metadata.premium_cancelled_at)
+  : null;
+const isPremium = Boolean(
+  premiumActiveUntil && !Number.isNaN(premiumActiveUntil.getTime()) && premiumActiveUntil > new Date()
+);
+let premiumStatus = metadata.premium_status || "inactive";
+
+if (!isPremium && premiumStatus === "cancelling") {
+  premiumStatus = "inactive";
+}
+const premiumActiveUntilISO = premiumActiveUntil?.toISOString() ?? null;
+const premiumCancelledAtISO = premiumCancelledAt?.toISOString() ?? null;
 const memberSince = new Date(user.created_at).toLocaleDateString('es-ES', {
   year: 'numeric',
   month: 'long',
@@ -70,7 +86,12 @@ const memberSince = new Date(user.created_at).toLocaleDateString('es-ES', {
         <div class="lg:col-span-2 space-y-6">
           
           <!-- Estado de la suscripción -->
-          <AccountStatus isPremium={isPremium} />
+          <AccountStatus
+            isPremium={isPremium}
+            premiumActiveUntil={premiumActiveUntilISO}
+            premiumCancelledAt={premiumCancelledAtISO}
+            premiumStatus={premiumStatus}
+          />
 
           <!-- Estadísticas comentadas -->
           <!-- 

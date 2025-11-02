@@ -2,7 +2,7 @@
   {
     "title": "The Art of API Design: Building Developer-Friendly Interfaces",
     "description": "Explore the principles and best practices for designing APIs that developers love to use and integrate with.",
-    "author": "Hasin Hayder",
+    "author": "David Arrauth",
     "category": "API Design",
     "tags": [
       "api",
@@ -12,5 +12,33 @@
       "backend"
     ],
     "slug": "template-example"
+  },
+  {
+    "title": "The Art of API Design: Building Developer-Friendly Interfaces",
+    "description": "Explore the principles and best practices for designing APIs that developers love to use and integrate with.",
+    "author": "David Arrauth",
+    "category": "API Design",
+    "tags": [
+      "api",
+      "rest",
+      "design",
+      "developer-experience",
+      "backend"
+    ],
+    "slug": "template-example2"
+  },
+  {
+    "title": "The Art of API Design: Building Developer-Friendly Interfaces",
+    "description": "Explore the principles and best practices for designing APIs that developers love to use and integrate with.",
+    "author": "David Arrauth",
+    "category": "API Design",
+    "tags": [
+      "api",
+      "rest",
+      "design",
+      "developer-experience",
+      "backend"
+    ],
+    "slug": "template-example3"
   }
 ]

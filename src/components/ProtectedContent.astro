@@ -1,20 +1,31 @@
 ---
 export interface Props {
   isAuthenticated: boolean;
+  isPremiumUser: boolean;
   slug: string;
   contentPreview?: string; // Vista previa opcional
+  planName?: string;
 }
 
-const { isAuthenticated, slug, contentPreview } = Astro.props;
+const { isAuthenticated, isPremiumUser, slug, contentPreview, planName } =
+  Astro.props;
 
 // Importar utilidades de ofuscación
 import { generateConsistentRandomContent, generateRandomParagraph } from '../utils/textObfuscator';
 
 // Generar contenido falso consistente basado en el slug
 const fakeContent = generateConsistentRandomContent(slug, 800);
+
+const effectivePlanName = planName || "Premium";
+const headline = isAuthenticated
+  ? `Hazte ${effectivePlanName}`
+  : "🔒 Contenido Premium";
+const description = isAuthenticated
+  ? `Este artículo es exclusivo para miembros ${effectivePlanName}. Actualiza tu cuenta para acceder al contenido completo.`
+  : "Este artículo es exclusivo para usuarios registrados. Regístrate o inicia sesión para acceder al contenido completo.";
 ---
 
-{!isAuthenticated && (
+{(!isAuthenticated || !isPremiumUser) && (
   <!-- Mostrar contenido ofuscado si no está autenticado -->
   <div class="protected-content-wrapper relative">
     <!-- Contenido falso difuminado -->
@@ -47,11 +58,11 @@ const fakeContent = generateConsistentRandomContent(slug, 800);
         </div>
         
         <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-slate-100">
-          🔒 Contenido Premium
+          {headline}
         </h3>
         
         <p class="text-gray-600 dark:text-slate-400 mb-6 leading-relaxed text-sm">
-          Este artículo es exclusivo para usuarios registrados. Regístrate para acceder al contenido completo.
+          {description}
           {contentPreview && (
             <span class="block mt-2 text-xs italic text-gray-500 dark:text-gray-400">
               Vista previa: {contentPreview}
@@ -60,19 +71,38 @@ const fakeContent = generateConsistentRandomContent(slug, 800);
         </p>
         
         <div class="space-y-3">
-          
-          
-          <a 
-            href="/signup" 
-            class="inline-block w-full border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-medium py-3 px-6 rounded-lg transition-colors duration-200 no-underline text-sm"
-          >
-            Crear Cuenta Gratis
-          </a>
+          {!isAuthenticated && (
+            <>
+              <a
+                href="/login"
+                class="inline-block w-full bg-gray-900 text-white dark:bg-slate-100 dark:text-slate-900 font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 dark:hover:bg-slate-200 transition-colors duration-200 no-underline text-sm"
+              >
+                Iniciar Sesión
+              </a>
+              <a
+                href="/signup"
+                class="inline-block w-full border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-medium py-3 px-6 rounded-lg transition-colors duration-200 no-underline text-sm"
+              >
+                Crear Cuenta Gratis
+              </a>
+            </>
+          )}
+
+          {isAuthenticated && !isPremiumUser && (
+            <a
+              href="/profile#premium"
+              class="inline-block w-full bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:opacity-95 transition-opacity duration-200 no-underline text-sm"
+            >
+              Actualizar a {effectivePlanName}
+            </a>
+          )}
         </div>
         
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
-          ¿Ya tienes cuenta? <a href="/login" class="text-blue-600 hover:underline">Inicia sesión aquí</a>
-        </p>
+        {!isAuthenticated && (
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
+            ¿Ya tienes cuenta? <a href="/login" class="text-blue-600 hover:underline">Inicia sesión aquí</a>
+          </p>
+        )}
       </div>
     </div>
   </div>

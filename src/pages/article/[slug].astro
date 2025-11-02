@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content"
+import { getCollection } from "astro:content"
 import BlogLayout from "../../layouts/BlogLayout.astro"
 import Header from "../../components/Header.astro"
 import Footer from "../../components/Footer.astro"
@@ -7,23 +7,19 @@ import FeaturedCard from "../../components/FeaturedCard.astro"
 import ProtectedContent from "../../components/ProtectedContent.astro"
 import SiteOptions from "../../site.config.mjs"
 import { supabase } from "../../lib/supabase"
-export const prerender = true
+
+export const prerender = false
 export async function getStaticPaths() {
-  const posts = await getCollection("article")
-  
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: post,
-  }))
+  return []
 }
-async function validatePremium(){
+async function resolveViewer() {
   const { cookies } = Astro;
 
   const accessToken = cookies.get("sb-access-token");
   const refreshToken = cookies.get("sb-refresh-token");
 
   if (!accessToken || !refreshToken) {
-    return false;
+    return { isAuthenticated: false, isPremium: false };
   }
 
   const { data, error } = await supabase.auth.setSession({
@@ -31,34 +27,50 @@ async function validatePremium(){
     access_token: accessToken.value,
   });
 
-  if (error) {
-    cookies.delete("sb-access-token", {
-      path: "/",
-    });
-    cookies.delete("sb-refresh-token", {
-      path: "/",
-    });
-
-    return false;
+  if (error || !data?.user) {
+    cookies.delete("sb-access-token", { path: "/" });
+    cookies.delete("sb-refresh-token", { path: "/" });
+    return { isAuthenticated: false, isPremium: false };
   }
 
-  return true;
+  const metadata = data.user.user_metadata || {};
+  const activeUntilValue = metadata.premium_active_until;
+  const activeUntil = activeUntilValue ? new Date(activeUntilValue) : null;
+  const isPremiumActive = Boolean(
+    activeUntil && !Number.isNaN(activeUntil.getTime()) && activeUntil > new Date()
+  );
+  const isLegacyPremium = Boolean(!activeUntil && metadata.is_premium);
+  const isPremium = isPremiumActive || isLegacyPremium;
+  return {
+    isAuthenticated: true,
+    isPremium,
+  };
 }
 
-type Props = CollectionEntry<"article">
+const { slug } = Astro.params as { slug?: string }
 
-const post = Astro.props
+if (!slug) {
+  return Astro.redirect("/404")
+}
+
+const allPosts = await getCollection("article")
+const post = allPosts.find((entry) => entry.slug === slug)
+
+if (!post || !post.data) {
+  return Astro.redirect("/404")
+}
+
 const { title, pubDate, category, description, thumb, author, tags, large, premium } = post.data
 const { Content } = await post.render()
 
-// Validar si el usuario está autenticado para contenido premium
-let isSignedIn = false;
-if (premium) {
-  isSignedIn = await validatePremium();
-}
+const planName = import.meta.env.WOMPI_SUBSCRIPTION_NAME || "Suscripción Premium";
+
+const viewer = premium ? await resolveViewer() : { isAuthenticated: false, isPremium: false };
+const canViewPremium = !premium || viewer.isPremium;
 // Get similar posts (same category, excluding current post)
-const allPosts = await getCollection("article")
-const similarPosts = allPosts.filter((p) => p.slug !== post.slug && p.data.category === post.data.category).slice(0, 3)
+const similarPosts = allPosts
+  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
+  .slice(0, 3)
 
 
 
@@ -93,6 +105,16 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
           </span>
         )
       }
+      {
+        premium && canViewPremium && (
+          <span class="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12 1.5a.75.75 0 0 1 .63.35l2.525 3.934 4.567 1.086a.75.75 0 0 1 .386 1.22l-3.05 3.417.55 4.984a.75.75 0 0 1-1.086.75L12 15.98l-4.522 2.32a.75.75 0 0 1-1.086-.75l.55-4.984-3.05-3.417a.75.75 0 0 1 .386-1.22L8.848 5.78 11.37 1.85A.75.75 0 0 1 12 1.5Zm0 4.156-1.92 2.99a.75.75 0 0 1-.418.32l-3.5.83 2.337 2.617a.75.75 0 0 1 .19.56l-.396 3.575 3.164-1.623a.75.75 0 0 1 .682 0l3.164 1.623-.396-3.576a.75.75 0 0 1 .19-.56l2.337-2.616-3.5-.83a.75.75 0 0 1-.418-.32L12 5.656Z" clip-rule="evenodd" />
+            </svg>
+            {planName}
+          </span>
+        )
+      }
     </div>
     <div class="text-sm text-gray-500 dark:text-gray-400">
       Tags:
@@ -117,11 +139,13 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
       )
     }
     
-    {premium && !isSignedIn ? (
+    {premium && !canViewPremium ? (
       <ProtectedContent 
-        isAuthenticated={isSignedIn}
+        isAuthenticated={viewer.isAuthenticated}
+        isPremiumUser={viewer.isPremium}
         slug={post.slug}
         contentPreview={description}
+        planName={planName}
       />
     ) : (
       <Content />

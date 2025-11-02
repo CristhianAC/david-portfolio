@@ -8,7 +8,7 @@ tags: ["api", "rest", "design", "developer-experience", "backend"]
 
 thumb: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=400&q=80"
 large: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2400&q=80"
-premium: false
+premium: true
 ---
 
 In today's interconnected digital world, APIs (Application Programming Interfaces) serve as the backbone of modern software development. A well-designed API can make or break the developer experience, determining whether your service becomes widely adopted or abandoned in frustration.

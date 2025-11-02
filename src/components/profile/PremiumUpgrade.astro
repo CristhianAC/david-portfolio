@@ -1,9 +1,23 @@
 ---
 // Este componente solo se muestra si el usuario no es premium
+import PremiumUpgradeButton from "./PremiumUpgradeButton.astro";
+
+const amountInCents = Number(
+  import.meta.env.WOMPI_SUBSCRIPTION_AMOUNT_IN_CENTS || "99900"
+);
+const currency = import.meta.env.WOMPI_SUBSCRIPTION_CURRENCY || "COP";
+const planName =
+  import.meta.env.WOMPI_SUBSCRIPTION_NAME || "Suscripción Premium";
+
+const amountFormatted = new Intl.NumberFormat("es-CO", {
+  style: "currency",
+  currency,
+  minimumFractionDigits: 0,
+}).format(amountInCents / 100);
 ---
 
-<!-- Botón de upgrade a Premium -->
 <div
+  id="premium"
   class="bg-gradient-to-br from-yellow-400 via-orange-500 to-pink-500 rounded-xl p-6 text-white"
 >
   <div class="text-center">
@@ -16,18 +30,14 @@
         ></path>
       </svg>
     </div>
-    <h3 class="text-xl font-bold mb-2">Hazte Premium</h3>
+    <h3 class="text-xl font-bold mb-2">{planName}</h3>
     <p class="text-sm opacity-90 mb-4">
       Desbloquea todo el contenido y disfruta de una experiencia completa
     </p>
     <div class="text-3xl font-bold mb-4">
-      $9.99<span class="text-lg font-normal opacity-80">/mes</span>
+      {amountFormatted}
+      <span class="text-lg font-normal opacity-80">/mes</span>
     </div>
-    <button
-      id="upgrade-button"
-      class="w-full bg-white text-gray-900 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors duration-200 shadow-lg cursor-pointer"
-    >
-      Actualizar Ahora
-    </button>
+    <PremiumUpgradeButton />
   </div>
 </div>
