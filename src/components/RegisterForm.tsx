@@ -451,28 +451,10 @@ export function RegisterForm() {
                 </p>
 
                 <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
-                  <a
-                    href="https://mail.google.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-                  >
-                    Abrir Gmail
-                  </a>
-
-                  <a
-                    href="https://outlook.live.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    Abrir Outlook
-                  </a>
-
                   <button
                     type="button"
                     onClick={() => (window.location.href = "/login")}
-                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                    className="inline-flex items-center justify-center rounded-lg bg-cyan-600 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-700"
                   >
                     Ir a iniciar sesión
                   </button>
@@ -480,9 +462,9 @@ export function RegisterForm() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmationDialog(false)}
-                    className="inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                   >
-                    Cerrar
+                    Aceptar
                   </button>
                 </div>
               </div>
