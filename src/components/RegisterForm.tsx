@@ -31,6 +31,7 @@ export function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -105,14 +106,8 @@ export function RegisterForm() {
         formData.password
       );
 
-      toast.success(
-        "¡Registro exitoso! Por favor verifica tu email antes de iniciar sesión."
-      );
-
-      // Redirigir al login después de un breve delay
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 2000);
+      // Mostrar diálogo de confirmación más explícito
+      setShowConfirmationDialog(true);
     } catch (error) {
       console.error("Error durante el registro:", error);
       const errorMessage =
@@ -430,6 +425,69 @@ export function RegisterForm() {
               </a>
             </p>
           </div>
+          {/* Confirmation dialog after successful registration */}
+          {showConfirmationDialog && (
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="confirm-dialog-title"
+              className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6"
+            >
+              <div className="fixed inset-0 bg-black/40" />
+
+              <div className="relative z-10 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl dark:bg-slate-900">
+                <h2
+                  id="confirm-dialog-title"
+                  className="text-lg font-semibold text-gray-900 dark:text-white"
+                >
+                  Confirma tu correo
+                </h2>
+                <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                  Revisa el mensaje enviado a{" "}
+                  <strong>{formData.email || "tu correo"}</strong> y sigue las
+                  instrucciones para confirmar tu cuenta. Si no lo ves en la
+                  bandeja de entrada, revisa la carpeta{" "}
+                  <em>spam/promociones</em>.
+                </p>
+
+                <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
+                  <a
+                    href="https://mail.google.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                  >
+                    Abrir Gmail
+                  </a>
+
+                  <a
+                    href="https://outlook.live.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Abrir Outlook
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => (window.location.href = "/login")}
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  >
+                    Ir a iniciar sesión
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmationDialog(false)}
+                    className="inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <ToastContainer

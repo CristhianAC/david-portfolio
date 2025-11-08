@@ -48,7 +48,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   return new Response(
     JSON.stringify({
       message:
-        "Registro exitoso. Por favor verifica tu email antes de iniciar sesión.",
+        "Registro exitoso. Revisa el mensaje enviado a tu correo y sigue las instrucciones para confirmar tu cuenta.",
       user: data.user,
       session: data.session,
     }),
